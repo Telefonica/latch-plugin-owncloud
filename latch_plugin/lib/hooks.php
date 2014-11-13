@@ -17,7 +17,7 @@ require_once 'latch_plugin/latchSDK/LatchResponse.php';
 
 class OC_LATCH_PLUGIN_Hooks{
     
-    static function postLogin($parameters) {
+    static public function postLogin($parameters) {
         $user = $parameters['uid'];
         self::checkLatch($user);
     }
@@ -72,6 +72,10 @@ class OC_LATCH_PLUGIN_Hooks{
                 // Current user properly logged in, but with blocked Latch 
                 // (ACCESS DENIED)
                 OCP\User::logout();
+                $params = ['invalidpassword' => true,
+                            'rememberLoginAllowed' => true,
+                            'username' => $user];
+                OC_Template::printGuestPage('','login',$params);
             }
         }
     }
