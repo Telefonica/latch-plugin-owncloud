@@ -25,11 +25,11 @@
     <br>
     <strong>Application ID</strong>
     <br>
-    <input type="text" name="appID" value="<?php p($_['appID']); ?>" style="width:300px">
+    <input type="text" name="appID" value="<?php p($_['appID']); ?>" autocomplete="off" style="width:300px">
     <br>
     <strong>Application Secret</strong>
     <br>
-    <input type="text" name="appSecret" value="<?php p($_['appSecret']); ?>" style="width:300px">
+    <input type="text" name="appSecret" value="<?php p($_['appSecret']); ?>" autocomplete="off" style="width:300px">
     <br>
     <br>    
     <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" >

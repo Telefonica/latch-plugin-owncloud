@@ -34,7 +34,7 @@
         <br>
         <strong>Latch Pairing Token</strong>
         <br>
-        <input type="text" name="latch_token" maxlength="10">
+        <input type="text" name="latch_token" autocomplete="off" maxlength="10">
         <br>
         <br>  
         <input type="hidden" name="action" value="pair" >
