@@ -1,0 +1,19 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14-nov-2014, 9:39:43
+    Author     : daniel.ruiz
+*/
+
+.twoFactorContainer { display:block; width:300px; margin: 5% auto 0 auto; text-align: center; border: solid 1px rgb(184, 184, 184); border-radius:5px}
+.twoFactorHeader {float:left; background: #00b9be; color: #FFF; width:100%; border-top-left-radius: 5px; border-top-right-radius: 5px; font-family: sans-serif;}
+.twoFactorHeader p {font-size: 20px; font-weight: bold;}
+.twoFactorHeader img {width: 45px; height: auto; float:left; margin-top: 5px; margin-bottom: 5px; margin-left:20px}
+.twoFactorForm {clear:left; padding-top:10px;}
+.twoFactorForm label {font-size: 16px; font-weight: bold;}
+input {margin-top:10px}
+input[type="text"] {cursor: auto;}
+input[type="submit"] {width:65px; float:none;}
