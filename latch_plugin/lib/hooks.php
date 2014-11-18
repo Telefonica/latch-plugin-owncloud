@@ -38,6 +38,12 @@ class OC_LATCH_PLUGIN_Hooks{
         if($_POST['twoFactor'] !== $otp){
             // Wrong OTP. Redirect to login page (ACCESS DENIED)
             OCP\User::logout();
+            $parameters = [
+                'user_autofocus' => true,
+                'rememberLoginAllowed' => true,
+                'invalidpassword' => false
+            ];
+            OC_Template::printGuestPage('','login',$parameters);
         }
         
         // In case the sent OTP is correct, the current user has access to the 
