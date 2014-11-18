@@ -2,10 +2,10 @@
 <info>
     <id>latch_plugin</id>
     <name>Latch Plugin</name>
-    <description>This app needs a description!!!</description>
-    <version>0.1</version>
+    <description>Plugin to authenticate ownCloud users with Latch service</description>
+    <version>1.0</version>
     <licence>LGPL</licence>
-    <author>Your Name</author>
+    <author>Eleven Paths</author>
     <requiremin>7</requiremin>
 
     <types>
