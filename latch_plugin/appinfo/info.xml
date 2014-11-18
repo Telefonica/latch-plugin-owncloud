@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<info>
+    <id>latch_plugin</id>
+    <name>Latch Plugin</name>
+    <description>Plugin to authenticate ownCloud users with Latch service</description>
+    <version>1.0</version>
+    <licence>LGPL</licence>
+    <author>Eleven Paths</author>
+    <requiremin>7</requiremin>
+
+    <types>
+        <authentication/>
+    </types>
+
+
+    <documentation>
+        <user>http://doc.owncloud.org</user>
+        <admin>http://doc.owncloud.org</admin>
+    </documentation>
+
+    <website>http://www.owncloud.org</website>
+
+    <shipped>true</shipped>
+</info>
