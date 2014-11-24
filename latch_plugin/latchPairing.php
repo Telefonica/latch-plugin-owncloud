@@ -19,45 +19,36 @@ require_once 'lib/latchPairingLib.php';
 OC_Util::checkLoggedIn();
 $user = OCP\User::getUser();
 
-// Constants:
-$DEFAULT_STRING = '';
-
 // Variables:
-$msg = $DEFAULT_STRING;
+$msg = '';
 
 // Form validation logic:
-if(($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['action'])){
-    $action = $_POST['action'];
-    switch ($action) {
-        case 'pair':
-            $token = getLatchToken();
-            if($token !== $DEFAULT_STRING){
-                $msg = pairAccount($token, $user);
-            }else{
-                $msg = ['class' => 'msg error',
-                'value' => 'Latch Pairing Token field is required'];
-            }
-            break;
-        
-        case 'unpair':
-            unpairAccount($user);
-            break;
-        
-        default:
+if(($_SERVER['REQUEST_METHOD'] === 'POST')){
+    // A pairing or unpairing action is performed depending on the case when the
+    // current user has (or not) an accountID:
+    
+    $accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+
+    if(empty($accountID)){
+        $token = getLatchToken();
+        if($token !== $DEFAULT_STRING){
+            $msg = pairAccount($token, $user);
+        }else{
             $msg = ['class' => 'msg error',
-                'value' => 'Oops! The requested action could not be executed'];
-            break;
+            'value' => 'Latch Pairing Token field is required'];
+        }
+    } else {
+        unpairAccount($user);
     }
 }
-
 
 // Template object instantiation:
 $tmpl = new OCP\Template('latch_plugin','latchPairingTemplate');
 
 // Check if user has an account ID:
-$accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID',$DEFAULT_STRING);
+$accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
 
-if($accountID !== $DEFAULT_STRING){
+if(!empty($accountID)){
     $has_account = true;
 } else {
     $has_account = false;
