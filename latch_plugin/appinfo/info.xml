@@ -12,13 +12,7 @@
         <authentication/>
     </types>
 
-
-    <documentation>
-        <user>http://doc.owncloud.org</user>
-        <admin>http://doc.owncloud.org</admin>
-    </documentation>
-
-    <website>http://www.owncloud.org</website>
+    <website>https://latch.elevenpaths.com/</website>
 
     <shipped>true</shipped>
 </info>
