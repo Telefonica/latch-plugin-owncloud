@@ -57,11 +57,7 @@ $tmpl = new OCP\Template('latch_plugin','latchPairingTemplate');
 // Check if user has an account ID:
 $accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID',$DEFAULT_STRING);
 
-if($accountID !== $DEFAULT_STRING){
-    $has_account = true;
-} else {
-    $has_account = false;
-}   
+$has_account = !empty($accountID);
 
 // Assign variables to the template:
 $tmpl->assign('msg',$msg);
