@@ -35,6 +35,13 @@
         </a>
     </em>
     <br>
+        <?php if(is_array($_['msg'])){ ?>
+        <br>
+        <span class="<?php p($_['msg']['class']); ?>">
+            <?php p($_['msg']['value']); ?>
+        </span>
+        <br>    
+        <?php } ?>    
     <br>
     <strong>Application ID</strong>
     <br>

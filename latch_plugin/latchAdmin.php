@@ -31,15 +31,25 @@ OC_Util::checkAdminUser();
 // Template object instantiation:
 $tmpl = new OCP\Template('latch_plugin', 'latchAdminTemplate');
 
+// VAriables:
+$msg = '';
+
 // Save input values:
-if ($_POST && 
-   (isset($_POST['appID']) && preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID'])) && 
-   (isset($_POST['appSecret']) && preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret']))){
+if (($_SERVER['REQUEST_METHOD'] === 'POST') && 
+    isset($_POST['appID']) && isset($_POST['appSecret'])){
     
-    OCP\Config::setAppValue('latch_plugin','appID',$_POST['appID']);
-    OCP\Config::setAppValue('latch_plugin','appSecret',$_POST['appSecret']);
-}else{
-    // ERROR MESSAGE: Wrong appID or Secret string format
+    if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
+        preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){
+
+        OCP\Config::setAppValue('latch_plugin','appID',$_POST['appID']);
+        OCP\Config::setAppValue('latch_plugin','appSecret',$_POST['appSecret']);
+    }else{
+        
+        $msg = [
+            'class' => 'msg error',
+            'value' => 'Wrong Application ID or Application Secret string format'
+        ];
+    }
 }
 
 // Set placeholders to the input fields:
@@ -49,6 +59,7 @@ $tmpl->assign('appID',$appID);
 $appSecret = OCP\Config::getAppValue('latch_plugin','appSecret','');
 $tmpl->assign('appSecret',$appSecret);
 
+$tmpl->assign('msg',$msg);
 
 return $tmpl->fetchPage();
 
