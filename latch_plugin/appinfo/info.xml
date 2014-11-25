@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <!--
   Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
   Copyright (C) 2013 Eleven Paths
@@ -17,10 +19,9 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  -->
 
-<?xml version="1.0"?>
 <info>
     <id>latch_plugin</id>
-    <name>Latch Plugin</name>
+    <name>Latch Authentication Plugin</name>
     <description>Plugin to authenticate ownCloud users with Latch service</description>
     <version>1.0</version>
     <licence>LGPL</licence>
@@ -33,5 +34,5 @@
 
     <website>https://latch.elevenpaths.com/</website>
 
-    <shipped>true</shipped>
+    <shipped>false</shipped>
 </info>
