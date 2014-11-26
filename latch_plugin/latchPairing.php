@@ -2,7 +2,7 @@
 
 /*
   Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
-  Copyright (C) 2013 Eleven Paths
+  Copyright (C) 2014 Eleven Paths.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
