@@ -11,9 +11,10 @@
  * hooks is described in this file.
  */
 
-// Latch SDK includes:
+// Library includes:
 require_once 'latch_plugin/latchSDK/Latch.php';
 require_once 'latch_plugin/latchSDK/LatchResponse.php';
+require_once 'latch_plugin/lib/db.php';
 
 class OC_LATCH_PLUGIN_Hooks{
     
@@ -32,8 +33,8 @@ class OC_LATCH_PLUGIN_Hooks{
     
     private function compareOTP($user) {
         // Retrieve OTP from database:
-        $otp = OCP\Config::getUserValue($user,'latch_plugin','OTP','');
-        OCP\Config::setUserValue($user,'latch_plugin','OTP','');//No longer needed
+        $otp = OC_LATCH_PLUGIN_DB::retrieveOTP($user);
+        OC_LATCH_PLUGIN_DB::saveOTP($user, '');//No longer needed
         
         if($_POST['twoFactor'] !== $otp){
             // Wrong OTP. Redirect to login page (ACCESS DENIED)
@@ -52,7 +53,7 @@ class OC_LATCH_PLUGIN_Hooks{
     
     private function checkLatch($user,$password) {
         // Check if current user has an accountID:
-        $accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+        $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
         if(!empty($accountID)){
             // Retrieve Latch status from Latch server:
             $statusResponse = self::getLatchStatus($accountID);
@@ -62,8 +63,8 @@ class OC_LATCH_PLUGIN_Hooks{
     
     private function getLatchStatus($accountID) {
         // Retrieve appID and appSecret from database:
-        $appID = OCP\Config::getAppValue('latch_plugin','appID','');
-        $appSecret = OCP\Config::getAppValue('latch_plugin','appSecret','');
+        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID(); 
+        $appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
         if(!empty($appID) && !empty($appSecret)){
             // Latch plugin properly configured
             $api = new Latch($appID, $appSecret);
@@ -77,7 +78,7 @@ class OC_LATCH_PLUGIN_Hooks{
     
     private function processStatusResponse($statusResponse,$user,$password){
         // Retrieve appID from database:
-        $appID = OCP\Config::getAppValue('latch_plugin','appID','');
+        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
         
         // Extract data and possible errors from the status response:
         $responseData = $statusResponse->getData();
@@ -91,7 +92,7 @@ class OC_LATCH_PLUGIN_Hooks{
                 // This error could happen because the user may have unpaired 
                 // their Lacth account externally. Therefore, their accountID 
                 // must be deleted from database (ACCESS GRANTED)
-                OCP\Config::setUserValue($user,'latch_plugin','accountID','');
+                OC_LATCH_PLUGIN_DB::deleteAccountData($user);
             }
             if(!empty($responseData) && self::isLatchUnblocked($responseData,$appID)){
                 // Current user properly logged in with unblocked Latch 
@@ -121,7 +122,7 @@ class OC_LATCH_PLUGIN_Hooks{
         if(self::isOTPenabled($responseData,$appID)){
             // Extract OTP from response object and store it in database:
             $otp = $responseData->{"operations"}->{$appID}->{"two_factor"}->{"token"};
-            OCP\Config::setUserValue($user,'latch_plugin','OTP',$otp);
+            OC_LATCH_PLUGIN_DB::saveOTP($user, $otp);
             
             // End current user's session and redirect them to OTP template:
             OCP\User::logout();
