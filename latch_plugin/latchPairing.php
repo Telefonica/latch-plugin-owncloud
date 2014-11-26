@@ -25,8 +25,9 @@
  * Latch account.
  */
 
-// Some library includes:
+// Library includes:
 require_once 'lib/latchPairingLib.php';
+require_once 'lib/db.php';
 
 // Check if the user is logged in and get username:
 OC_Util::checkLoggedIn();
@@ -59,7 +60,7 @@ if(($_SERVER['REQUEST_METHOD'] === 'POST')){
 $tmpl = new OCP\Template('latch_plugin','latchPairingTemplate');
 
 // Check if user has an account ID:
-$accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+$accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
 
 $has_account = !empty($accountID);
 

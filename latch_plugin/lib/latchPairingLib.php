@@ -24,9 +24,10 @@
  * process (it depends on the Latch SDK).
  */
 
-// Latch SDK includes:
+// Library includes:
 require_once 'latch_plugin/latchSDK/Latch.php';
 require_once 'latch_plugin/latchSDK/LatchResponse.php';
+require_once 'latch_plugin/lib/db.php';
 
 // Functions:
 function getLatchToken(){
@@ -40,11 +41,11 @@ function getLatchToken(){
 
 function pairAccount($token, $user){
     $msg = ''; // This is the default value of the returned variable
-    $accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
     if(empty($accountID)){ 
         // Current user account not paired
-        $appID = OCP\Config::getAppValue('latch_plugin','appID','');
-        $appSecret = OCP\Config::getAppValue('latch_plugin','appSecret','');
+        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
+        $appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
         
         if(!empty($appID) && !empty($appSecret)){
             // Latch plugin properly configured
@@ -64,7 +65,7 @@ function processPairResponseData($pairResponseData,$user){
         // An accountID has been received
         $accountID = $pairResponseData->{'accountId'};
         // Save accountID in database and set success message:
-        OCP\Config::setUserValue($user,'latch_plugin','accountID',$accountID);
+        OC_LATCH_PLUGIN_DB::saveAccountID($user, $accountID);
         $msg = ['class' => 'msg success', 'value' => 'Pairing success'];
     }else{
         // There has been no success in the pairing process:
@@ -76,22 +77,19 @@ function processPairResponseData($pairResponseData,$user){
 
 function unpairAccount($user){
     // First, check if user has actually a paired Latch account:
-    $accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
     if(!empty($accountID)){
         // The current user has a paired account. 
         // Let's proceed with the unpairing:
-        $appID = OCP\Config::getAppValue('latch_plugin','appID','');
-        $appSecret = OCP\Config::getAppValue('latch_plugin','appSecret','');
+        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
+        $appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
         
         if(!empty($appID) && !empty($appSecret)){
             // Latch plugin properly configured
             $api = new Latch($appID, $appSecret);
             $api->unpair($accountID);
             
-            // As the ownCloud API does not allow to delete the data saved with
-            // the OCP\Config::setUserValue method, an empty string will be 
-            // assigned to the stored accountID:
-            OCP\Config::setUserValue($user,'latch_plugin','accountID','');
+            OC_LATCH_PLUGIN_DB::deleteAccountData($user);
         }
     }
 }

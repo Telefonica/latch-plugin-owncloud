@@ -25,6 +25,9 @@
  * configure the Latch Application.
  */
 
+// Library includes:
+require_once 'lib/db.php';
+
 // Check if admin user:
 OC_Util::checkAdminUser();
 
@@ -41,8 +44,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
     if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
         preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){
 
-        OCP\Config::setAppValue('latch_plugin','appID',$_POST['appID']);
-        OCP\Config::setAppValue('latch_plugin','appSecret',$_POST['appSecret']);
+        OC_LATCH_PLUGIN_DB::saveAppID($_POST['appID']);
+        OC_LATCH_PLUGIN_DB::saveAppSecret($_POST['appSecret']);
     }else{
         
         $msg = [
@@ -53,10 +56,10 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
 }
 
 // Set placeholders to the input fields:
-$appID = OCP\Config::getAppValue('latch_plugin','appID','');
+$appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
 $tmpl->assign('appID',$appID);
 
-$appSecret = OCP\Config::getAppValue('latch_plugin','appSecret','');
+$appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
 $tmpl->assign('appSecret',$appSecret);
 
 $tmpl->assign('msg',$msg);
