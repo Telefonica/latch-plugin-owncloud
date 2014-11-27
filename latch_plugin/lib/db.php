@@ -19,38 +19,43 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+define(PLUGIN_NAME, 'latch_plugin');
+define(APPID_KEY, 'appID');
+define(APPSECRET_KEY, 'appSecret');
+define(ACCOUNTID_KEY, 'accountID');
+define(OTP_KEY, 'OTP');
 
 class OC_LATCH_PLUGIN_DB{
     public static function saveAppID($appID){
-        OCP\Config::setAppValue('latch_plugin','appID',$appID);
+        OCP\Config::setAppValue(PLUGIN_NAME,APPID_KEY,$appID);
     }
     
     public static function retrieveAppID(){
-        return OCP\Config::getAppValue('latch_plugin','appID','');
+        return OCP\Config::getAppValue(PLUGIN_NAME,APPID_KEY,'');
     }
     
     public static function saveAppSecret($appSecret){
-        OCP\Config::setAppValue('latch_plugin','appSecret',$appSecret);
+        OCP\Config::setAppValue(PLUGIN_NAME,APPSECRET_KEY,$appSecret);
     }
     
     public static function retrieveAppSecret(){
-        return OCP\Config::getAppValue('latch_plugin','appSecret','');
+        return OCP\Config::getAppValue(PLUGIN_NAME,APPSECRET_KEY,'');
     }
     
     public static function saveAccountID($user,$accountID){
-        OCP\Config::setUserValue($user,'latch_plugin','accountID',$accountID);
+        OCP\Config::setUserValue($user,PLUGIN_NAME,ACCOUNTID_KEY,$accountID);
     }
     
     public static function retrieveAccountID($user){
-        return OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+        return OCP\Config::getUserValue($user,PLUGIN_NAME,ACCOUNTID_KEY,'');
     }
     
     public static function saveOTP($user,$otp){
-        OCP\Config::setUserValue($user,'latch_plugin','OTP',$otp);
+        OCP\Config::setUserValue($user,PLUGIN_NAME,OTP_KEY,$otp);
     }
     
     public static function retrieveOTP($user){
-        return OCP\Config::getUserValue($user,'latch_plugin','OTP','');
+        return OCP\Config::getUserValue($user,PLUGIN_NAME,OTP_KEY,'');
     }
     
     public static function deleteAccountData($user){
