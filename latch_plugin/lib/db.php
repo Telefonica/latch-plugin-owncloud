@@ -59,10 +59,7 @@ class OC_LATCH_PLUGIN_DB{
     }
     
     public static function deleteAccountData($user){
-        if(OC_DB::connect()){
-            $query = OC_DB::prepare("DELETE FROM `oc_preferences` WHERE `userid`=? AND `appid`='latch_plugin'");
-            OC_DB::executeAudited($query,[$user]);
-        }
+        \OC_Preferences::deleteApp($user,PLUGIN_NAME);
     }
     
     public static function deletePluginData(){
