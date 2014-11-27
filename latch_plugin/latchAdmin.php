@@ -25,31 +25,44 @@
  * configure the Latch Application.
  */
 
+// Library includes:
+require_once 'lib/db.php';
+
 // Check if admin user:
 OC_Util::checkAdminUser();
-
-// Constants:
-$DEFAULT_STRING = '';
 
 // Template object instantiation:
 $tmpl = new OCP\Template('latch_plugin', 'latchAdminTemplate');
 
-// Save input values:
-if ($_POST && isset($_POST['appID']) ){
-    OCP\Config::setAppValue('latch_plugin','appID',$_POST['appID']);
-}
+// VAriables:
+$msg = '';
 
-if ($_POST && isset($_POST['appSecret']) ){
-    OCP\Config::setAppValue('latch_plugin','appSecret',$_POST['appSecret']);
+// Save input values:
+if (($_SERVER['REQUEST_METHOD'] === 'POST') && 
+    isset($_POST['appID']) && isset($_POST['appSecret'])){
+    
+    if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
+        preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){
+
+        OC_LATCH_PLUGIN_DB::saveAppID($_POST['appID']);
+        OC_LATCH_PLUGIN_DB::saveAppSecret($_POST['appSecret']);
+    }else{
+        
+        $msg = [
+            'class' => 'msg error',
+            'value' => 'Wrong Application ID or Application Secret string format'
+        ];
+    }
 }
 
 // Set placeholders to the input fields:
-$appID = OCP\Config::getAppValue('latch_plugin','appID',$DEFAULT_STRING);
+$appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
 $tmpl->assign('appID',$appID);
 
-$appSecret = OCP\Config::getAppValue('latch_plugin','appSecret',$DEFAULT_STRING);
+$appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
 $tmpl->assign('appSecret',$appSecret);
 
+$tmpl->assign('msg',$msg);
 
 return $tmpl->fetchPage();
 
