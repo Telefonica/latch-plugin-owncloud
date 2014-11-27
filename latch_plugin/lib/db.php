@@ -63,6 +63,7 @@ class OC_LATCH_PLUGIN_DB{
     }
     
     public static function deletePluginData(){
-        
+        \OC_Preferences::deleteAppFromAllUsers(PLUGIN_NAME);
+        \OC_AppConfig::deleteApp(PLUGIN_NAME);
     }
 }
