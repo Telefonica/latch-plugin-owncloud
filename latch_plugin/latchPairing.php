@@ -41,7 +41,7 @@ if(($_SERVER['REQUEST_METHOD'] === 'POST')){
     // A pairing or unpairing action is performed depending on the case when the
     // current user has (or not) an accountID:
     
-    $accountID = OCP\Config::getUserValue($user,'latch_plugin','accountID','');
+    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
 
     if(empty($accountID)){
         $token = getLatchToken();
