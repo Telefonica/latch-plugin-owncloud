@@ -35,7 +35,7 @@ OC_Util::checkAdminUser();
 
 // Template object instantiation:
 
-OCP\Util::addStyle(PLUGIN_NAME, 'colorbox');
+OCP\Util::addStyle('firstrunwizard', 'colorbox');
 OCP\Util::addStyle(PLUGIN_NAME, 'uninstallStyle');
 OCP\Util::addStyle(PLUGIN_NAME, 'uninstallLatchStyle');
 OCP\Util::addScript(PLUGIN_NAME, 'uninstallPopup');
