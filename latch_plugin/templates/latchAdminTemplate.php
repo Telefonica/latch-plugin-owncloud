@@ -54,5 +54,5 @@
     <br>    
     <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" >
     <input type='submit' value='<?php p($l->t('Save'));?>'>
-    <a style="margin-left:50px;text-decoration: underline;">Uninstall Plugin</a>
+    <a id="show_popup" style="margin-left:50px;text-decoration: underline;">Uninstall Plugin</a>
 </form>

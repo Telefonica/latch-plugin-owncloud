@@ -28,13 +28,20 @@
 // Library includes:
 require_once 'lib/db.php';
 
+define(PLUGIN_NAME, 'latch_plugin');
+
 // Check if admin user:
 OC_Util::checkAdminUser();
 
 // Template object instantiation:
-$tmpl = new OCP\Template('latch_plugin', 'latchAdminTemplate');
 
-// VAriables:
+OCP\Util::addStyle(PLUGIN_NAME, 'colorbox');
+OCP\Util::addStyle(PLUGIN_NAME, 'uninstallStyle');
+OCP\Util::addStyle(PLUGIN_NAME, 'uninstallLatchStyle');
+OCP\Util::addScript(PLUGIN_NAME, 'uninstallPopup');
+
+$tmpl = new OCP\Template(PLUGIN_NAME, 'latchAdminTemplate');
+
 $msg = '';
 
 // Save input values:

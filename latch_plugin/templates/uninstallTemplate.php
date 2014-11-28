@@ -1,0 +1,44 @@
+<?php
+
+/*
+  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
+  Copyright (C) 2014 Eleven Paths.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+?>
+<div id="uninstall_warning">
+
+    <a id="closeWarning" class="close">
+            <img class="svg" src="<?php print_unescaped(OCP\Util::imagePath('core', 'actions/close.svg')); ?>">
+    </a>
+    <div class="warningContainer" style="background-color: white;">
+        <div class="warningHeader">
+            <img src="apps/latch_plugin/img/symbol.png">
+            <h1 style="display:inline;margin-left: -65px;">Uninstall Plugin</h1>
+        </div>
+        <div class="warningContent">
+            <p>If the process continues, all the data managed by this plugin
+            will be removed from database.</p>
+            <br>
+            <p><strong>Warning: This action cannot be undone.</strong></p>
+            <br> <br> <br>
+            <a href="<?php print_unescaped(\OCP\Util::linkToRoute('latch_uninstall')); ?>" id="accept_uninstall" class="button" style="background: #00b9be;color: #FFF;">Accept</a>
+            <a id="cancel_uninstall" class="button" style="background: #00b9be;color: #FFF;">Cancel</a>
+        </div>
+    </div>
+    
+</div>
