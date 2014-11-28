@@ -45,15 +45,4 @@ $(window).load(function(){
     $('#cancel_uninstall').live('click', function () {	
         $.colorbox.close();
     });
-    
-    $('#accept_uninstall').live('click', function () {	
-        $.ajax({
-            url: 'apps/latch_plugin/ajax/uninstall.php',
-            success: function(){
-                $.colorbox.close();
-            }
-        });
-    });
-    
-    
 });
