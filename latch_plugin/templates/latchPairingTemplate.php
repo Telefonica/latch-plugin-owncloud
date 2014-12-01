@@ -27,7 +27,7 @@
 ?>
 
 <form id="latch_pairing_form" class="section" method="POST" action="#latch_pairing_form">
-    <h2>Latch Account</h2>
+    <h2><?php p($l->t('Latch Account'));?></h2>
     
         <?php if(is_array($_['msg'])){ ?>
         <br>
@@ -38,14 +38,14 @@
         <?php } ?>
         
     <?php if($_['has_account']){ ?>
-        <em>Click the button to unpair your Latch account</em>
+        <em><?php p($l->t('Click the button to unpair your Latch account'));?></em>
         <br>
         <input type="hidden" name="action" value="unpair" >
         <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" >
         <input type='submit' value='<?php p($l->t('Unpair Account'));?>'>
     <?php }else{ ?>
         <br>
-        <strong>Latch Pairing Token</strong>
+        <strong><?php p($l->t('Latch Pairing Token'));?></strong>
         <br>
         <input type="text" name="latch_token" autocomplete="off" maxlength="10">
         <br>

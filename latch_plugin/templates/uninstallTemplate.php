@@ -28,20 +28,20 @@
     <div class="warningContainer" style="background-color: white;">
         <div class="warningHeader">
             <img src="<?php print_unescaped(OCP\Util::imagePath('latch_plugin', 'symbol.png')); ?>">
-            <h1 style="display:inline;margin-left: -65px;">Uninstall Plugin</h1>
+            <h1 style="display:inline;margin-left: -65px;"><?php p($l->t('Uninstall Plugin')); ?></h1>
         </div>
         <div class="warningContent">
-            <p>If the process continues, all the data managed by this plugin
-            will be removed from database.</p>
+            <p><?php p($l->t('If the process continues, all the data managed by this plugin
+            will be removed from database.')); ?></p>
             <br>
-            <p><strong>Warning: This action cannot be undone.</strong></p>
+            <p><strong><?php p($l->t('Warning: This action cannot be undone.')); ?></strong></p>
             <br> <br> <br>
             <form method="POST" action="<?php print_unescaped(\OCP\Util::linkToRoute('latch_uninstall')); ?>">
                 <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" />
-                <input type="submit" value="Accept" class="button" style="background: #00b9be;color: #FFF;
+                <input type="submit" value="<?php p($l->t('Accept')); ?>" class="button" style="background: #00b9be;color: #FFF;
                        font-family: inherit;vertical-align: baseline;width: 77px;height: 32px;padding-top: 3px">
             </form>
-            <a id="cancel_uninstall" class="button" style="background: #00b9be;color: #FFF;">Cancel</a>
+            <a id="cancel_uninstall" class="button" style="background: #00b9be;color: #FFF;"><?php p($l->t('Cancel')); ?></a>
         </div>
     </div>
     

@@ -34,9 +34,10 @@ define(PLUGIN_NAME, 'latch_plugin');
 OC_Util::checkAdminUser();
 OC_Util::checkAppEnabled('latch_plugin');
 
+// Needed for multi language support:
+$l = OC_L10N::get('latch_plugin');
 
 // Template object instantiation:
-
 OCP\Util::addStyle('firstrunwizard', 'colorbox');
 OCP\Util::addStyle(PLUGIN_NAME, 'uninstallStyle');
 OCP\Util::addStyle(PLUGIN_NAME, 'uninstallLatchStyle');
@@ -61,7 +62,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
         
         $msg = [
             'class' => 'msg error',
-            'value' => 'Wrong Application ID or Application Secret string format'
+            'value' => $l->t('Wrong Application ID or Application Secret string format')
         ];
     }
 }

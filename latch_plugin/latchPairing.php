@@ -39,6 +39,9 @@ $user = OCP\User::getUser();
 // Variables:
 $msg = '';
 
+// Needed for multi language support:
+$l = OC_L10N::get('latch_plugin');
+
 // Form validation logic:
 if(($_SERVER['REQUEST_METHOD'] === 'POST')){
     // A pairing or unpairing action is performed depending on the case when the
@@ -54,7 +57,7 @@ if(($_SERVER['REQUEST_METHOD'] === 'POST')){
             $msg = pairAccount($token, $user);
         }else{
             $msg = ['class' => 'msg error',
-            'value' => 'Latch Pairing Token field is required'];
+            'value' => $l->t('Latch Pairing Token field is required')];
         }
     } else {
         unpairAccount($user);
