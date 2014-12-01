@@ -27,7 +27,7 @@
     </a>
     <div class="warningContainer" style="background-color: white;">
         <div class="warningHeader">
-            <img src="apps/latch_plugin/img/symbol.png">
+            <img src="<?php print_unescaped(OCP\Util::imagePath('latch_plugin', 'symbol.png')); ?>">
             <h1 style="display:inline;margin-left: -65px;">Uninstall Plugin</h1>
         </div>
         <div class="warningContent">
@@ -36,7 +36,11 @@
             <br>
             <p><strong>Warning: This action cannot be undone.</strong></p>
             <br> <br> <br>
-            <a href="<?php print_unescaped(\OCP\Util::linkToRoute('latch_uninstall')); ?>" id="accept_uninstall" class="button" style="background: #00b9be;color: #FFF;">Accept</a>
+            <form method="POST" action="<?php print_unescaped(\OCP\Util::linkToRoute('latch_uninstall')); ?>">
+                <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" />
+                <input type="submit" value="Accept" class="button" style="background: #00b9be;color: #FFF;
+                       font-family: inherit;vertical-align: baseline;width: 77px;height: 32px;padding-top: 3px">
+            </form>
             <a id="cancel_uninstall" class="button" style="background: #00b9be;color: #FFF;">Cancel</a>
         </div>
     </div>

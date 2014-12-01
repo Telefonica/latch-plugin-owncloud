@@ -20,6 +20,7 @@
  */
 
 OCP\User::checkLoggedIn();
+OC_Util::checkAppEnabled('latch_plugin');
 
 $tmpl = new OCP\Template('latch_plugin', 'uninstallTemplate');
 

@@ -26,7 +26,7 @@
 
 ?>
 
-<form id="latch_admin_form" class="section" method="POST" action="#">
+<form id="latch_admin_form" class="section" method="POST" action="#latch_admin_form">
     <h2>Latch Configuration</h2>
     <em>This is the section to set the Latch plugin. In order to be registered  
         as a Latch application, please visit  

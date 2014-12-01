@@ -32,6 +32,8 @@ define(PLUGIN_NAME, 'latch_plugin');
 
 // Check if admin user:
 OC_Util::checkAdminUser();
+OC_Util::checkAppEnabled('latch_plugin');
+
 
 // Template object instantiation:
 
@@ -47,6 +49,8 @@ $msg = '';
 // Save input values:
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && 
     isset($_POST['appID']) && isset($_POST['appSecret'])){
+    
+    OCP\Util::callCheck(); // Prevents CRSF
     
     if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
         preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){

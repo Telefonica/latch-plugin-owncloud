@@ -23,7 +23,10 @@ require_once 'lib/db.php';
 
 OC_Util::checkAdminUser();
 OC_Util::checkAppEnabled('latch_plugin');
+OCP\Util::callCheck(); // Prevents CRSF
 
 OC_LATCH_PLUGIN_DB::deletePluginData();
-header('Location:apps/');
+
+// Redirect to home:
+header( 'Location: '.OC_Helper::linkToAbsolute( '', 'index.php' ));
 

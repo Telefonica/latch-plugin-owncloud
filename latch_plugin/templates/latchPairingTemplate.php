@@ -26,7 +26,7 @@
 
 ?>
 
-<form id="latch_pairing_form" class="section" method="POST" action="#">
+<form id="latch_pairing_form" class="section" method="POST" action="#latch_pairing_form">
     <h2>Latch Account</h2>
     
         <?php if(is_array($_['msg'])){ ?>

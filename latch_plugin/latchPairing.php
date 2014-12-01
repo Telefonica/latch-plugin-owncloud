@@ -31,6 +31,9 @@ require_once 'lib/db.php';
 
 // Check if the user is logged in and get username:
 OC_Util::checkLoggedIn();
+OC_Util::checkAppEnabled('latch_plugin');
+
+
 $user = OCP\User::getUser();
 
 // Variables:
@@ -40,6 +43,8 @@ $msg = '';
 if(($_SERVER['REQUEST_METHOD'] === 'POST')){
     // A pairing or unpairing action is performed depending on the case when the
     // current user has (or not) an accountID:
+    
+    OCP\Util::callCheck(); // Prevents CRSF
     
     $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
 
