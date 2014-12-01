@@ -26,10 +26,10 @@
 
 ?>
 
-<form id="latch_admin_form" class="section" method="POST" action="#">
-    <h2>Latch Configuration</h2>
-    <em>This is the section to set the Latch plugin. In order to be registered  
-        as a Latch application, please visit  
+<form id="latch_admin_form" class="section" method="POST" action="#latch_admin_form">
+    <h2><?php p($l->t('Latch Configuration'));?></h2>
+    <em><?php p($l->t('This is the section to set the Latch plugin. In order to be registered  
+        as a Latch application, please visit'));?>  
         <a target="blank" href="http://latch.elevenpaths.com">
             http://latch.elevenpaths.com
         </a>
@@ -43,15 +43,16 @@
         <br>    
         <?php } ?>    
     <br>
-    <strong>Application ID</strong>
+    <strong><?php p($l->t('Application ID'));?></strong>
     <br>
     <input type="text" name="appID" value="<?php p($_['appID']); ?>" autocomplete="off" style="width:300px">
     <br>
-    <strong>Application Secret</strong>
+    <strong><?php p($l->t('Application Secret'));?></strong>
     <br>
     <input type="text" name="appSecret" value="<?php p($_['appSecret']); ?>" autocomplete="off" style="width:300px">
     <br>
     <br>    
     <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" >
     <input type='submit' value='<?php p($l->t('Save'));?>'>
+    <a id="show_popup" style="margin-left:50px;text-decoration: underline;"><?php p($l->t('Uninstall Plugin'));?></a>
 </form>

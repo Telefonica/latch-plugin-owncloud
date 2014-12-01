@@ -28,18 +28,30 @@
 // Library includes:
 require_once 'lib/db.php';
 
+define(PLUGIN_NAME, 'latch_plugin');
+
 // Check if admin user:
 OC_Util::checkAdminUser();
+OC_Util::checkAppEnabled('latch_plugin');
+
+// Needed for multi language support:
+$l = OC_L10N::get('latch_plugin');
 
 // Template object instantiation:
-$tmpl = new OCP\Template('latch_plugin', 'latchAdminTemplate');
+OCP\Util::addStyle('firstrunwizard', 'colorbox');
+OCP\Util::addStyle(PLUGIN_NAME, 'uninstallStyle');
+OCP\Util::addStyle(PLUGIN_NAME, 'uninstallLatchStyle');
+OCP\Util::addScript(PLUGIN_NAME, 'uninstallPopup');
 
-// VAriables:
+$tmpl = new OCP\Template(PLUGIN_NAME, 'latchAdminTemplate');
+
 $msg = '';
 
 // Save input values:
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && 
     isset($_POST['appID']) && isset($_POST['appSecret'])){
+    
+    OCP\Util::callCheck(); // Prevents CRSF
     
     if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
         preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){
@@ -50,7 +62,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
         
         $msg = [
             'class' => 'msg error',
-            'value' => 'Wrong Application ID or Application Secret string format'
+            'value' => $l->t('Wrong Application ID or Application Secret string format')
         ];
     }
 }

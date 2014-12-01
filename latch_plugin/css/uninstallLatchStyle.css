@@ -1,0 +1,60 @@
+/*
+  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
+  Copyright (C) 2014 Eleven Paths.
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+.warningContainer { 
+    display:block; 
+    width:auto; 
+    margin: 5% auto 0 auto; 
+    text-align: center; 
+    border: solid 1px rgb(184, 184, 184); 
+    border-radius:5px
+}
+.warningHeader {
+    padding-bottom: 25px;
+    padding-top: 25px;
+    float:left; 
+    background: #00b9be; 
+    color: #FFF; 
+    width:100%; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+    font-family: sans-serif;
+}
+.warningHeader img {
+    width: 45px; 
+    height: auto; 
+    float:left; 
+    margin-top: 5px; 
+    margin-bottom: 5px; 
+    margin-left:20px
+}
+.warningContent {
+    clear:left; 
+    padding-top:10px;
+}
+.warningContent p {
+    font-size: 16px;
+}
+input {
+    margin-top:10px
+}
+.warningContent a {
+    width:65px; 
+    float:none;
+}

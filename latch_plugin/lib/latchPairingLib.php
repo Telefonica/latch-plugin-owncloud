@@ -60,16 +60,19 @@ function pairAccount($token, $user){
 }
 
 function processPairResponseData($pairResponseData,$user){
+    // Needed for multi language support:
+    $l = OC_L10N::get('latch_plugin');
+    
     $msg = ''; // This is the default value of the returned variable
     if(!empty($pairResponseData) && !empty($pairResponseData->{'accountId'})){
         // An accountID has been received
         $accountID = $pairResponseData->{'accountId'};
         // Save accountID in database and set success message:
         OC_LATCH_PLUGIN_DB::saveAccountID($user, $accountID);
-        $msg = ['class' => 'msg success', 'value' => 'Pairing success'];
+        $msg = ['class' => 'msg success', 'value' => $l->t('Pairing success')];
     }else{
         // There has been no success in the pairing process:
-        $msg = ['class' => 'msg error', 'value' => 'Pairing token not valid'];
+        $msg = ['class' => 'msg error', 'value' => $l->t('Pairing token not valid')];
     }
     
     return $msg;
