@@ -28,7 +28,7 @@
     <div class="warningContainer" style="background-color: white;">
         <div class="warningHeader">
             <img src="<?php print_unescaped(OCP\Util::imagePath('latch_plugin', 'symbol.png')); ?>">
-            <h1 style="display:inline;margin-left: -65px;"><?php p($l->t('Uninstall Plugin')); ?></h1>
+            <h1 style="display:inline;margin-left: -65px;"><?php p($l->t('Disable Plugin')); ?></h1>
         </div>
         <div class="warningContent">
             <p><?php p($l->t('If the process continues, all the data managed by this plugin
