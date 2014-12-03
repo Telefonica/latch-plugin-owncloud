@@ -23,7 +23,7 @@
 .twoFactorHeader p {font-size: 20px; font-weight: bold;}
 .twoFactorHeader img {width: 45px; height: auto; float:left; margin-top: 5px; margin-bottom: 5px; margin-left:20px}
 .twoFactorForm {clear:left; padding-top:10px;}
-.twoFactorForm label {font-size: 16px; font-weight: bold;}
+.twoFactorForm label {font-size: 15px; font-weight: bold; text-align: center;}
 input {margin-top:10px}
 input[type="text"] {cursor: auto;}
 input[type="submit"] {width:65px; float:none;}
