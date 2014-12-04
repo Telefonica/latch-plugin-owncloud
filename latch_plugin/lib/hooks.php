@@ -140,6 +140,7 @@ class OC_LATCH_PLUGIN_Hooks{
             // End current user's session and redirect them to OTP template:
             OCP\User::logout();
             $vars = ['username' => $user, 'password' => $password];
+            OCP\Util::addStyle('latch_plugin', 'latchOTPTemplate');
             OC_Template::printGuestPage('latch_plugin','latchOTPTemplate',$vars);
         }
     }
