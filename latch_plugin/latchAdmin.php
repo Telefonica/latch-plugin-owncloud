@@ -28,8 +28,6 @@
 // Library includes:
 require_once 'lib/db.php';
 
-define(PLUGIN_NAME, 'latch_plugin');
-
 // Check if admin user:
 OC_Util::checkAdminUser();
 OC_Util::checkAppEnabled('latch_plugin');
