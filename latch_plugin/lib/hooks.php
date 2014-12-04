@@ -47,11 +47,11 @@ class OC_LATCH_PLUGIN_Hooks{
     static private function compareOTP($user) {
         // Retrieve OTP from database:
         $otp = OC_LATCH_PLUGIN_DB::retrieveOTP($user);
-        OC_LATCH_PLUGIN_DB::saveOTP($user, '');//No longer needed
+        OC_LATCH_PLUGIN_DB::saveOTP($user, NULL);//No longer needed
         
-        if($_POST['twoFactor'] !== $otp){
+        if(empty($_POST['twoFactor']) || ($_POST['twoFactor'] !== $otp)){
             // Wrong OTP. Redirect to login page (ACCESS DENIED)
-            OCP\User::logout();
+            OC_User::logout();
             $parameters = [
                 'user_autofocus' => true,
                 'rememberLoginAllowed' => true,
@@ -118,7 +118,7 @@ class OC_LATCH_PLUGIN_Hooks{
             }else{
                 // Current user properly logged in, but with blocked Latch 
                 // (ACCESS DENIED)
-                OCP\User::logout();
+                OC_User::logout();
                 $params = ['invalidpassword' => true,
                             'rememberLoginAllowed' => true,
                             'username' => $user];
@@ -138,7 +138,7 @@ class OC_LATCH_PLUGIN_Hooks{
             OC_LATCH_PLUGIN_DB::saveOTP($user, $otp);
             
             // End current user's session and redirect them to OTP template:
-            OCP\User::logout();
+            OC_User::logout();
             $vars = ['username' => $user, 'password' => $password];
             OCP\Util::addStyle('latch_plugin', 'latchOTPTemplate');
             OC_Template::printGuestPage('latch_plugin','latchOTPTemplate',$vars);
