@@ -19,11 +19,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-define(PLUGIN_NAME, 'latch_plugin');
-define(APPID_KEY, 'appID');
-define(APPSECRET_KEY, 'appSecret');
-define(ACCOUNTID_KEY, 'accountID');
-define(OTP_KEY, 'OTP');
+define('PLUGIN_NAME', 'latch_plugin');
+define('APPID_KEY', 'appID');
+define('APPSECRET_KEY', 'appSecret');
+define('ACCOUNTID_KEY', 'accountID');
+define('OTP_KEY', 'OTP');
 
 class OC_LATCH_PLUGIN_DB{
     public static function saveAppID($appID){
