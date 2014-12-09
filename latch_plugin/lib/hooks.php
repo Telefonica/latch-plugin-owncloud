@@ -24,6 +24,8 @@
  * hooks is described in this file.
  */
 
+error_reporting(0);
+
 // Library includes:
 require_once 'latch_plugin/latchSDK/Latch.php';
 require_once 'latch_plugin/latchSDK/LatchResponse.php';
