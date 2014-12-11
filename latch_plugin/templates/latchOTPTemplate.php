@@ -32,7 +32,7 @@
                 <div>
                     <label for="edit-twofactor" style="margin-left: 37px; margin-right: 32px;"><?php p($l->t('Type your one-time password'));?></label>
                     <input type="text" id="edit-twofactor" name="twoFactor" value="" autofocus 
-                           autocomplete="off" size="20" maxlength="10" style="border: solid 1px rgb(184, 184, 184);
+                           autocomplete="off" size="20" maxlength="6" style="border: solid 1px rgb(184, 184, 184);
                            margin-left: 15px; margin-right: 15px;">
                 </div>
                 <input type="hidden" name="user" value="<?php p($_['username']); ?>">

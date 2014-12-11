@@ -47,7 +47,7 @@
         <br>
         <strong><?php p($l->t('Latch Pairing Token'));?></strong>
         <br>
-        <input type="text" name="latch_token" autocomplete="off" maxlength="10">
+        <input type="text" name="latch_token" autocomplete="off" maxlength="6">
         <br>
         <br>  
         <input type="hidden" name="action" value="pair" >
