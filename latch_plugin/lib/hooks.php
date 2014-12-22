@@ -49,10 +49,11 @@ class OC_LATCH_PLUGIN_Hooks{
     static private function compareOTP($user) {
         // Retrieve OTP from database:
         $otp = OC_LATCH_PLUGIN_DB::retrieveOTP($user);
-        OC_LATCH_PLUGIN_DB::saveOTP($user, NULL);//No longer needed
         
         if(empty($_POST['twoFactor']) || ($_POST['twoFactor'] !== $otp)){
             // Wrong OTP. Redirect to login page (ACCESS DENIED)
+            OC_LATCH_PLUGIN_DB::saveOTP($user, NULL);//No longer needed
+
             OC_User::logout();
             $parameters = [
                 'user_autofocus' => true,
