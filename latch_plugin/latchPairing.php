@@ -25,14 +25,21 @@
  * Latch account.
  */
 
+use OCA\Latch_Plugin\AppInfo\Application;
+
 // Library includes:
 require_once 'lib/latchPairingLib.php';
-require_once 'lib/db.php';
+
+// Get an instance of the Application class for dependency injection purposes:
+$application = new Application();
+
+$appName = $application->getContainer()->query('AppName');
 
 // Check if the user is logged in and get username:
 OC_Util::checkLoggedIn();
-OC_Util::checkAppEnabled('latch_plugin');
+OC_Util::checkAppEnabled($appName);
 
+$dbService = $application->getContainer()->query('DbService');
 
 $user = OCP\User::getUser();
 
@@ -40,7 +47,7 @@ $user = OCP\User::getUser();
 $msg = '';
 
 // Needed for multi language support:
-$l = OC_L10N::get('latch_plugin');
+$l = OC_L10N::get($appName);
 
 // Form validation logic:
 if(($_SERVER['REQUEST_METHOD'] === 'POST')){
@@ -49,7 +56,7 @@ if(($_SERVER['REQUEST_METHOD'] === 'POST')){
     
     OCP\Util::callCheck(); // Prevents CRSF
     
-    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
+    $accountID = $dbService->retrieveAccountID($user);
 
     if(empty($accountID)){
         $token = getLatchToken();
@@ -65,10 +72,10 @@ if(($_SERVER['REQUEST_METHOD'] === 'POST')){
 }
 
 // Template object instantiation:
-$tmpl = new OCP\Template('latch_plugin','latchPairingTemplate');
+$tmpl = new OCP\Template($appName,'latchPairingTemplate');
 
 // Check if user has an account ID:
-$accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
+$accountID = $dbService->retrieveAccountID($user);
 
 $has_account = !empty($accountID);
 

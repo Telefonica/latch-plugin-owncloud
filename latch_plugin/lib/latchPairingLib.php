@@ -24,10 +24,11 @@
  * process (it depends on the Latch SDK).
  */
 
+use OCA\Latch_Plugin\AppInfo\Application;
+
 // Library includes:
 require_once 'latch_plugin/latchSDK/Latch.php';
 require_once 'latch_plugin/latchSDK/LatchResponse.php';
-require_once 'latch_plugin/lib/db.php';
 
 // Functions:
 function getLatchToken(){
@@ -40,26 +41,31 @@ function getLatchToken(){
 }
 
 function pairAccount($token, $user){
+    // We need an instance of the db handler.
+    // It is retrieved from de DI container.
+    $application = new Application();
+    $dbService = $application->getContainer()->query('DbService');
+    
     $msg = ''; // This is the default value of the returned variable
-    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
+    $accountID = $dbService->retrieveAccountID($user);
     if(empty($accountID)){ 
         // Current user account not paired
-        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
-        $appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
+        $appID = $dbService->retrieveAppID();
+        $appSecret = $dbService->retrieveAppSecret();
         
         if(!empty($appID) && !empty($appSecret)){
             // Latch plugin properly configured
             $api = new Latch($appID, $appSecret);
             $pairResponse = $api->pair($token);
             $pairResponseData = $pairResponse->getData();
-            $msg = processPairResponseData($pairResponseData,$user);
+            $msg = processPairResponseData($pairResponseData,$user,$dbService);
         }
     }
     
     return $msg;
 }
 
-function processPairResponseData($pairResponseData,$user){
+function processPairResponseData($pairResponseData,$user,$dbService){
     // Needed for multi language support:
     $l = OC_L10N::get('latch_plugin');
     
@@ -68,7 +74,7 @@ function processPairResponseData($pairResponseData,$user){
         // An accountID has been received
         $accountID = $pairResponseData->{'accountId'};
         // Save accountID in database and set success message:
-        OC_LATCH_PLUGIN_DB::saveAccountID($user, $accountID);
+        $dbService->saveAccountID($user, $accountID);
         $msg = ['class' => 'msg success', 'value' => $l->t('Pairing success')];
     }else{
         // There has been no success in the pairing process:
@@ -79,20 +85,24 @@ function processPairResponseData($pairResponseData,$user){
 }
 
 function unpairAccount($user){
+    // We need an instance of the db handler.
+    // It is retrieved from de DI container.
+    $application = new Application();
+    $dbService = $application->getContainer()->query('DbService');
+    
     // First, check if user has actually a paired Latch account:
-    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
+    $accountID = $dbService->retrieveAccountID($user);
     if(!empty($accountID)){
         // The current user has a paired account. 
         // Let's proceed with the unpairing:
-        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
-        $appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
+        $appID = $dbService->retrieveAppID();
+        $appSecret = $dbService->retrieveAppSecret();
         
         if(!empty($appID) && !empty($appSecret)){
             // Latch plugin properly configured
             $api = new Latch($appID, $appSecret);
             $api->unpair($accountID);
-            
-            OC_LATCH_PLUGIN_DB::deleteAccountData($user);
+            $dbService->deleteAccountData($user);
         }
     }
 }
