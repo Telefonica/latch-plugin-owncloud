@@ -24,7 +24,7 @@ function showuninstallwarning(){
 		speed:100, 
 		width:"70%", 
 		height:"70%", 
-		href: OC.filePath('latch_plugin', '', 'uninstallRenderer.php'),
+		href: OC.linkTo('latch_plugin', 'uninstallRenderer.php'),
 		onComplete : function(){
 			if (!SVGSupport()) {
 				replaceSVG();
