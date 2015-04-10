@@ -22,7 +22,9 @@
 namespace OCA\Latch_Plugin\AppInfo;
 
 use \OCP\AppFramework\App;
+
 use OCA\Latch_Plugin\Lib\DbService;
+use OCA\Latch_Plugin\Lib\PairingService;
 
 class Application extends App{
     /*
@@ -44,11 +46,27 @@ class Application extends App{
         return $c->query('ServerContainer')->getConfig();
     });
     
+    $container->registerService('L10N', function($c){
+        
+        return $c->query('ServerContainer')
+                ->getL10N(
+                    $c->query('AppName')
+                );
+    });
+    
     $container->registerService('DbService', function($c){
         
         return new DbService(
                     $c->query('Config'),
                     $c->query('AppName')
+                );
+    });
+    
+    $container->registerService('PairingService', function($c){
+        
+        return new PairingService(
+                    $c->query('L10N'),
+                    $c->query('DbService')
                 );
     });
 

@@ -49,12 +49,17 @@ class Error {
 	
 	/**
 	 *
-	 * @return JsonObject a Json object with the code and message of the error
+	 * @return Json representation with the code and message of the error
 	 */
 	public function toJson() {
-		$error = new JsonObject();
-		$error.addProperty("code", $this->code);
-		$error.addProperty("message", $this->message);
-		return $error;
+		$error = array();
+		if(!empty($this->code)) {
+		    $error["code"] = $this->code;
+		}
+		
+		if(!empty($this->message)) {
+		    $error["message"] = $this->message;
+		}
+		return json_encode($error);
 	}
 }

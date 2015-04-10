@@ -25,10 +25,11 @@
  * Latch account.
  */
 
-use OCA\Latch_Plugin\AppInfo\Application;
+use \OCP\JSON;
+use \OCP\Template;
+use \OCP\User;
 
-// Library includes:
-require_once 'lib/latchPairingLib.php';
+use \OCA\Latch_Plugin\AppInfo\Application;
 
 // Get an instance of the Application class for dependency injection purposes:
 $application = new Application();
@@ -36,43 +37,46 @@ $application = new Application();
 $appName = $application->getContainer()->query('AppName');
 
 // Check if the user is logged in and get username:
-OC_Util::checkLoggedIn();
-OC_Util::checkAppEnabled($appName);
+JSON::checkLoggedIn();
+JSON::checkAdminUser();
+JSON::checkAppEnabled($appName);
 
 $dbService = $application->getContainer()->query('DbService');
 
-$user = OCP\User::getUser();
+$user = User::getUser();
 
 // Variables:
 $msg = '';
 
 // Needed for multi language support:
-$l = OC_L10N::get($appName);
+$l = $application->getContainer()->query('L10N');
 
 // Form validation logic:
 if(($_SERVER['REQUEST_METHOD'] === 'POST')){
     // A pairing or unpairing action is performed depending on the case when the
     // current user has (or not) an accountID:
     
-    OCP\Util::callCheck(); // Prevents CRSF
+    JSON::callCheck(); // Prevents CSRF
+    
+    $pairingService = $application->getContainer()->query('PairingService');
     
     $accountID = $dbService->retrieveAccountID($user);
-
+    
     if(empty($accountID)){
-        $token = getLatchToken();
+        $token = $pairingService->getLatchToken();
         if(!empty($token)){
-            $msg = pairAccount($token, $user);
+            $msg = $pairingService->pairAccount($token, $user);
         }else{
             $msg = ['class' => 'msg error',
             'value' => $l->t('Latch Pairing Token field is required')];
         }
     } else {
-        unpairAccount($user);
+        $pairingService->unpairAccount($user);
     }
 }
 
 // Template object instantiation:
-$tmpl = new OCP\Template($appName,'latchPairingTemplate');
+$tmpl = new Template($appName,'latchPairingTemplate');
 
 // Check if user has an account ID:
 $accountID = $dbService->retrieveAccountID($user);

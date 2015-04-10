@@ -24,6 +24,10 @@
  * It includes some libraries and defines the app architechture.
  */
 
+// Latch SDK files includes:
+require_once 'latch_plugin/latchSDK/Latch.php';
+require_once 'latch_plugin/latchSDK/LatchResponse.php';
+    
 // Registration of some classes in the ownCloud's CLASSPATH variable:
 OC::$CLASSPATH['OC_LATCH_PLUGIN_Hooks'] = 'latch_plugin/lib/hooks.php';
 
