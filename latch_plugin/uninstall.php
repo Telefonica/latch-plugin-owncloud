@@ -19,14 +19,17 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once 'lib/db.php';
+use \OCP\JSON;
 
-OC_Util::checkAdminUser();
-OC_Util::checkAppEnabled('latch_plugin');
-OCP\Util::callCheck(); // Prevents CRSF
+use \OCA\Latch_Plugin\AppInfo\Application;
 
-OC_LATCH_PLUGIN_DB::deletePluginData();
+JSON::checkAdminUser();
+JSON::checkAppEnabled('latch_plugin');
+JSON::callCheck(); // Prevents CSRF
+
+$app = new Application();
+$app->getContainer()->query('DbService')->deletePluginData();
 
 // Redirect to home:
-header( 'Location: '.OC_Helper::linkToAbsolute( '', 'index.php' ));
+header('Location: '.OC_Helper::linkToAbsolute( '', 'index.php' ));
 

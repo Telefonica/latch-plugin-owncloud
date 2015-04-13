@@ -21,6 +21,7 @@
 
 namespace OCA\Latch_Plugin\Lib;
 
+use \OCP\IAppConfig;
 use \OCP\IConfig;
 
 define('PLUGIN_NAME', 'latch_plugin');
@@ -32,12 +33,14 @@ define('OTP_KEY', 'OTP');
 class DbService{
     
     // Attribute with access to ownCloud's config database
+    
+    private $appName;
     /**
      * @var \OCP\IConfig $config 
      */
     private $config;
-    
-    private $appName;
+
+    private $appConfig;
     
     private $dbKeys = [
         'appIdKey'     => 'appID',
@@ -46,9 +49,10 @@ class DbService{
         'otpKey'       => 'OTP'
     ];
     
-    public function __construct(IConfig $config, $AppName){
-        $this->config = $config;
-        $this->appName = $AppName;
+    public function __construct($AppName, IConfig $config, IAppConfig $appConfig){
+        $this->appName   = $AppName;
+        $this->config    = $config;
+        $this->appConfig = $appConfig;
     }
     
     public function saveAppID($appID){
@@ -123,8 +127,8 @@ class DbService{
         }
     }
     
-    public static function deletePluginData(){
-        \OC_Preferences::deleteAppFromAllUsers(PLUGIN_NAME);
-        \OC_AppConfig::deleteApp(PLUGIN_NAME);
+    public function deletePluginData(){
+        $this->config->deleteAppFromAllUsers($this->appName);
+        $this->appConfig->deleteApp($this->appName);
     }
 }

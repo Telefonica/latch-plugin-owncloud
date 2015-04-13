@@ -47,6 +47,11 @@ class Application extends App{
         return $c->query('ServerContainer')->getConfig();
     });
     
+    $container->registerService('PluginConfig', function($c){
+        
+        return $c->query('ServerContainer')->getAppConfig();
+    });
+    
     $container->registerService('Session', function($c){
         
         return $c->query('ServerContainer')->getUserSession();
@@ -63,8 +68,9 @@ class Application extends App{
     $container->registerService('DbService', function($c){
         
         return new DbService(
+                    $c->query('AppName'),
                     $c->query('Config'),
-                    $c->query('AppName')
+                    $c->query('PluginConfig')
                 );
     });
     
