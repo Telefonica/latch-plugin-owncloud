@@ -24,63 +24,90 @@
  * hooks is described in this file.
  */
 
+namespace OCA\Latch_Plugin\Lib;
+
+use \Latch;
+use \LatchResponse;
+
+use \OC\User\Session;
+
+use \OCP\Template;
+use \OCP\Util;
+
+use \OCA\Latch_Plugin\Lib\DbService;
+
 error_reporting(0);
 
-// Library includes:
-require_once 'latch_plugin/latchSDK/Latch.php';
-require_once 'latch_plugin/latchSDK/LatchResponse.php';
-require_once 'latch_plugin/lib/db.php';
-
-class OC_LATCH_PLUGIN_Hooks{
+class LatchHooks{
     
-    static public function postLogin($parameters) {
-        $user     = $parameters['uid'];
-        $password = $parameters['password'];
+    private $appName;
+    
+    private $userSession;
+    
+    private $dbService;
+    
+    public function __construct($AppName, Session $userSession, DbService $dbService) {
+        $this->appName     = $AppName;
+        $this->userSession = $userSession;
+        $this->dbService   = $dbService;
+    }
+    
+    public function register(){
+        // The method 'postLogin' is registered 
+        // under the hook of the same name:
+        $callback = function($user, $password){
+            $this->postLogin($user->getUID(), $password);
+        };
         
+        $this->userSession->listen('\OC\User', 'postLogin', $callback);
+    }
+
+
+    public function postLogin($user, $password) {
         // At this point, it is necessary to know whether this function has been
         // called due to a login, or it is because of an OTP sending:
         if(isset($_POST['twoFactor'])){
-            self::compareOTP($user);
+            $this->compareOTP($user);
         }else{
-            self::checkLatch($user,$password);
+            $this->checkLatch($user,$password);
         }
     }
     
-    static private function compareOTP($user) {
+    private function compareOTP($user) {
         // Retrieve OTP from database:
-        $otp = OC_LATCH_PLUGIN_DB::retrieveOTP($user);
+        $otp = $this->dbService->retrieveOTP($user);
         
         if(empty($_POST['twoFactor']) || ($_POST['twoFactor'] !== $otp)){
             // Wrong OTP. Redirect to login page (ACCESS DENIED)
-            OC_LATCH_PLUGIN_DB::saveOTP($user, NULL);//No longer needed
+            $this->dbService->saveOTP($user, NULL);//No longer needed
 
-            OC_User::logout();
+            $this->userSession->logout();
             $parameters = [
                 'user_autofocus' => true,
                 'rememberLoginAllowed' => true,
                 'invalidpassword' => false
             ];
-            OC_Template::printGuestPage('','login',$parameters);
+            Template::printGuestPage('','login',$parameters);
         }
         
         // In case the sent OTP is correct, the current user has access to the 
         // platform (ACCESS GRANTED)
     }
     
-    static private function checkLatch($user,$password) {
+    private function checkLatch($user,$password) {
         // Check if current user has an accountID:
-        $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
+        $accountID = $this->dbService->retrieveAccountID($user);
         if(!empty($accountID)){
             // Retrieve Latch status from Latch server:
-            $statusResponse = self::getLatchStatus($accountID);
-            self::processStatusResponse($statusResponse,$user,$password);
+            $statusResponse = $this->getLatchStatus($accountID);
+            $this->processStatusResponse($statusResponse,$user,$password);
         }
     }
     
-    static private function getLatchStatus($accountID) {
+    private function getLatchStatus($accountID) {
         // Retrieve appID and appSecret from database:
-        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID(); 
-        $appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
+        $appID = $this->dbService->retrieveAppID(); 
+        $appSecret = $this->dbService->retrieveAppSecret();
         if(!empty($appID) && !empty($appSecret)){
             // Latch plugin properly configured
             $api = new Latch($appID, $appSecret);
@@ -92,9 +119,9 @@ class OC_LATCH_PLUGIN_Hooks{
         }
     }
     
-    static private function processStatusResponse($statusResponse,$user,$password){
+    private function processStatusResponse($statusResponse,$user,$password){
         // Retrieve appID from database:
-        $appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
+        $appID = $this->dbService->retrieveAppID();
         
         // Extract data and possible errors from the status response:
         $responseData = $statusResponse->getData();
@@ -108,47 +135,47 @@ class OC_LATCH_PLUGIN_Hooks{
                 // This error could happen because the user may have unpaired 
                 // their Lacth account externally. Therefore, their accountID 
                 // must be deleted from database (ACCESS GRANTED)
-                OC_LATCH_PLUGIN_DB::deleteAccountData($user);
+                $this->dbService->deleteAccountData($user);
             }
-            if(!empty($responseData) && self::isLatchUnblocked($responseData,$appID)){
+            if(!empty($responseData) && $this->isLatchUnblocked($responseData,$appID)){
                 // Current user properly logged in with unblocked Latch 
                 
                 // First, it is necessary to check if OTP functionality has been
                 // enabled:
-                self::checkOTP($responseData,$appID,$user,$password);
+                $this->checkOTP($responseData,$appID,$user,$password);
                 // In the case it is not enabled, the current user has access to
                 // the platform (ACCESS GRANTED)
             }else{
                 // Current user properly logged in, but with blocked Latch 
                 // (ACCESS DENIED)
-                OC_User::logout();
+                $this->userSession->logout();
                 $params = ['invalidpassword' => true,
                             'rememberLoginAllowed' => true,
                             'username' => $user];
-                OC_Template::printGuestPage('','login',$params);
+                Template::printGuestPage('','login',$params);
             }
         }
     }
     
-    static private function isLatchUnblocked($responseData, $appID) {
+    private function isLatchUnblocked($responseData, $appID) {
         return $responseData->{"operations"}->{$appID}->{"status"} === "on";
     }
     
-    static private function checkOTP($responseData,$appID,$user,$password) {
-        if(self::isOTPenabled($responseData,$appID)){
+    private function checkOTP($responseData,$appID,$user,$password) {
+        if($this->isOTPenabled($responseData,$appID)){
             // Extract OTP from response object and store it in database:
             $otp = $responseData->{"operations"}->{$appID}->{"two_factor"}->{"token"};
-            OC_LATCH_PLUGIN_DB::saveOTP($user, $otp);
+            $this->dbService->saveOTP($user, $otp);
             
             // End current user's session and redirect them to OTP template:
-            OC_User::logout();
+            $this->userSession->logout();
             $vars = ['username' => $user, 'password' => $password];
-            OCP\Util::addStyle('latch_plugin', 'latchOTPTemplate');
-            OC_Template::printGuestPage('latch_plugin','latchOTPTemplate',$vars);
+            Util::addStyle($this->appName, 'latchOTPTemplate');
+            Template::printGuestPage($this->appName,'latchOTPTemplate',$vars);
         }
     }
     
-    static private function isOTPEnabled($responseData,$appID){
+    private function isOTPEnabled($responseData,$appID){
         return property_exists($responseData->{"operations"}->{$appID}, "two_factor");
     }
 }

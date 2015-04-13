@@ -23,8 +23,9 @@ namespace OCA\Latch_Plugin\AppInfo;
 
 use \OCP\AppFramework\App;
 
-use OCA\Latch_Plugin\Lib\DbService;
-use OCA\Latch_Plugin\Lib\PairingService;
+use \OCA\Latch_Plugin\Lib\DbService;
+use \OCA\Latch_Plugin\Lib\LatchHooks;
+use \OCA\Latch_Plugin\Lib\PairingService;
 
 class Application extends App{
     /*
@@ -44,6 +45,11 @@ class Application extends App{
     $container->registerService('Config', function($c){
         
         return $c->query('ServerContainer')->getConfig();
+    });
+    
+    $container->registerService('Session', function($c){
+        
+        return $c->query('ServerContainer')->getUserSession();
     });
     
     $container->registerService('L10N', function($c){
@@ -69,6 +75,14 @@ class Application extends App{
                     $c->query('DbService')
                 );
     });
-
+    
+    $container->registerService('LatchHooks', function($c){
+        
+        return new LatchHooks(
+                    $c->query('AppName'),
+                    $c->query('Session'),
+                    $c->query('DbService')
+                );
+    });
   }
 }
