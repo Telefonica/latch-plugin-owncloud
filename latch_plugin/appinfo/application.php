@@ -57,6 +57,11 @@ class Application extends App{
         return $c->query('ServerContainer')->getUserSession();
     });
     
+    $container->registerService('URLHelper', function($c){
+        
+        return $c->query('ServerContainer')->getURLGenerator();
+    });
+    
     $container->registerService('L10N', function($c){
         
         return $c->query('ServerContainer')

@@ -25,7 +25,11 @@
  * configure the Latch Application.
  */
 
-use OCA\Latch_Plugin\AppInfo\Application;
+use \OCP\JSON;
+use \OCP\Template;
+use \OCP\Util;
+
+use \OCA\Latch_Plugin\AppInfo\Application;
 
 // Get an instance of the Application class for dependency injection purposes:
 $application = new Application();
@@ -33,21 +37,21 @@ $application = new Application();
 $appName = $application->getContainer()->query('AppName');
 
 // Check if admin user:
-OC_Util::checkAdminUser();
-OC_Util::checkAppEnabled($appName);
+JSON::checkAdminUser();
+JSON::checkAppEnabled($appName);
 
 $dbService = $application->getContainer()->query('DbService');
 
 // Needed for multi language support:
-$l = OC_L10N::get($appName);
+$l = $application->getContainer()->query('L10N');
 
 // Template object instantiation:
-OCP\Util::addStyle('firstrunwizard', 'colorbox');
-OCP\Util::addStyle($appName, 'uninstallStyle');
-OCP\Util::addStyle($appName, 'uninstallLatchStyle');
-OCP\Util::addScript($appName, 'uninstallPopup');
+Util::addStyle('firstrunwizard', 'colorbox');
+Util::addStyle($appName, 'uninstallStyle');
+Util::addStyle($appName, 'uninstallLatchStyle');
+Util::addScript($appName, 'uninstallPopup');
 
-$tmpl = new OCP\Template($appName, 'latchAdminTemplate');
+$tmpl = new Template($appName, 'latchAdminTemplate');
 
 $msg = '';
 
@@ -55,7 +59,7 @@ $msg = '';
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && 
     isset($_POST['appID']) && isset($_POST['appSecret'])){
     
-    OCP\Util::callCheck(); // Prevents CRSF
+    JSON::callCheck(); // Prevents CSRF
     
     if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
         preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){

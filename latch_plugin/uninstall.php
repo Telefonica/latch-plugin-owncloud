@@ -24,12 +24,15 @@ use \OCP\JSON;
 use \OCA\Latch_Plugin\AppInfo\Application;
 
 JSON::checkAdminUser();
-JSON::checkAppEnabled('latch_plugin');
-JSON::callCheck(); // Prevents CSRF
 
 $app = new Application();
+JSON::checkAppEnabled($app->getContainer()->query('AppName'));
+
+JSON::callCheck(); // Prevents CSRF
+
 $app->getContainer()->query('DbService')->deletePluginData();
 
 // Redirect to home:
-header('Location: '.OC_Helper::linkToAbsolute( '', 'index.php' ));
+$homeUrl = $app->getContainer()->query('URLHelper')->linkTo('', 'index.php');
+header('Location: '.$homeUrl);
 

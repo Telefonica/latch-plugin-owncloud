@@ -19,9 +19,17 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-OCP\User::checkLoggedIn();
-OC_Util::checkAppEnabled('latch_plugin');
+use \OCP\JSON;
+use \OCP\Template;
 
-$tmpl = new OCP\Template('latch_plugin', 'uninstallTemplate');
+use \OCA\Latch_Plugin\AppInfo\Application;
+
+JSON::checkLoggedIn();
+
+$app = new Application();
+$appName = $app->getContainer()->query('AppName');
+JSON::checkAppEnabled($appName);
+
+$tmpl = new Template($appName, 'uninstallTemplate');
 
 return $tmpl->printPage();
