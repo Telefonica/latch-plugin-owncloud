@@ -24,7 +24,6 @@
  * hooks is described in this file.
  */
 
-error_reporting(0);
 
 // Library includes:
 require_once 'latch_plugin/latchSDK/Latch.php';
@@ -61,6 +60,7 @@ class OC_LATCH_PLUGIN_Hooks{
                 'invalidpassword' => false
             ];
             OC_Template::printGuestPage('','login',$parameters);
+            exit();
         }
         
         // In case the sent OTP is correct, the current user has access to the 
@@ -126,6 +126,7 @@ class OC_LATCH_PLUGIN_Hooks{
                             'rememberLoginAllowed' => true,
                             'username' => $user];
                 OC_Template::printGuestPage('','login',$params);
+                exit();
             }
         }
     }
@@ -145,6 +146,7 @@ class OC_LATCH_PLUGIN_Hooks{
             $vars = ['username' => $user, 'password' => $password];
             OCP\Util::addStyle('latch_plugin', 'latchOTPTemplate');
             OC_Template::printGuestPage('latch_plugin','latchOTPTemplate',$vars);
+            exit();
         }
     }
     
