@@ -19,4 +19,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-$this->create('latch_uninstall','uninstall.php')->actionInclude('latch_plugin/uninstall.php');
+$this->create('latch_uninstall','uninstall.php')
+        ->actionInclude('latch_plugin/uninstall.php');
+$this->create('latch_uninstallrenderer', 'uninstallRenderer.php')
+        ->actionInclude('latch_plugin/uninstallRenderer.php');
