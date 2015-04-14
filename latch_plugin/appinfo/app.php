@@ -29,8 +29,10 @@ use \OCP\App;
 use \OCA\Latch_Plugin\AppInfo\Application;
 
 // Latch SDK files includes:
-require_once 'latch_plugin/latchSDK/Latch.php';
+require_once 'latch_plugin/latchSDK/Error.php';
 require_once 'latch_plugin/latchSDK/LatchResponse.php';
+require_once 'latch_plugin/latchSDK/LatchAuth.php';
+require_once 'latch_plugin/latchSDK/LatchApp.php';
     
 // Hooks:
 $app = new Application();

@@ -20,11 +20,13 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+namespace ElevenPaths\Latch;
+
 class Error {
+
 	private $code;
 	private $message;
-	
-	
+
 	/**
 	 * 
 	 * @param string $json a Json representation of an error with "code" and "message" elements
@@ -49,17 +51,12 @@ class Error {
 	
 	/**
 	 *
-	 * @return Json representation with the code and message of the error
+	 * @return JsonObject a Json object with the code and message of the error
 	 */
 	public function toJson() {
-		$error = array();
-		if(!empty($this->code)) {
-		    $error["code"] = $this->code;
-		}
-		
-		if(!empty($this->message)) {
-		    $error["message"] = $this->message;
-		}
-		return json_encode($error);
+		$error = new JsonObject();
+		$error.addProperty("code", $this->code);
+		$error.addProperty("message", $this->message);
+		return $error;
 	}
 }

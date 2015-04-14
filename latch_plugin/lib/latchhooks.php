@@ -26,8 +26,8 @@
 
 namespace OCA\Latch_Plugin\Lib;
 
-use \Latch;
-use \LatchResponse;
+use \ElevenPaths\Latch\LatchApp as Latch;
+use \ElevenPaths\Latch\LatchResponse;
 
 use \OC\User\Session;
 
