@@ -1,8 +1,8 @@
 <?php
 
 /*
-  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
-  Copyright (C) 2014 Eleven Paths.
+  Latch ownCloud 8 plugin - Integrates Latch into the ownCloud 8 authentication process.
+  Copyright (C) 2015 Eleven Paths.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,50 +25,61 @@
  * Latch account.
  */
 
-// Library includes:
-require_once 'lib/latchPairingLib.php';
-require_once 'lib/db.php';
+use \OCP\JSON;
+use \OCP\Template;
+use \OCP\User;
+
+use \OCA\Latch_Plugin\AppInfo\Application;
+
+// Get an instance of the Application class for dependency injection purposes:
+$application = new Application();
+
+$appName = $application->getContainer()->query('AppName');
 
 // Check if the user is logged in and get username:
-OC_Util::checkLoggedIn();
-OC_Util::checkAppEnabled('latch_plugin');
+JSON::checkLoggedIn();
+JSON::checkAdminUser();
+JSON::checkAppEnabled($appName);
 
+$dbService = $application->getContainer()->query('DbService');
 
-$user = OCP\User::getUser();
+$user = User::getUser();
 
 // Variables:
 $msg = '';
 
 // Needed for multi language support:
-$l = OC_L10N::get('latch_plugin');
+$l = $application->getContainer()->query('L10N');
 
 // Form validation logic:
 if(($_SERVER['REQUEST_METHOD'] === 'POST')){
     // A pairing or unpairing action is performed depending on the case when the
     // current user has (or not) an accountID:
     
-    OCP\Util::callCheck(); // Prevents CRSF
+    JSON::callCheck(); // Prevents CSRF
     
-    $accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
-
+    $pairingService = $application->getContainer()->query('PairingService');
+    
+    $accountID = $dbService->retrieveAccountID($user);
+    
     if(empty($accountID)){
-        $token = getLatchToken();
+        $token = $pairingService->getLatchToken();
         if(!empty($token)){
-            $msg = pairAccount($token, $user);
+            $msg = $pairingService->pairAccount($token, $user);
         }else{
             $msg = ['class' => 'msg error',
             'value' => $l->t('Latch Pairing Token field is required')];
         }
     } else {
-        unpairAccount($user);
+        $pairingService->unpairAccount($user);
     }
 }
 
 // Template object instantiation:
-$tmpl = new OCP\Template('latch_plugin','latchPairingTemplate');
+$tmpl = new Template($appName,'latchPairingTemplate');
 
 // Check if user has an account ID:
-$accountID = OC_LATCH_PLUGIN_DB::retrieveAccountID($user);
+$accountID = $dbService->retrieveAccountID($user);
 
 $has_account = !empty($accountID);
 

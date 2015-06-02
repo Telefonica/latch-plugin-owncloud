@@ -1,8 +1,8 @@
 <?php
 
 /*
-  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
-  Copyright (C) 2014 Eleven Paths.
+  Latch ownCloud 8 plugin - Integrates Latch into the ownCloud 8 authentication process.
+  Copyright (C) 2015 Eleven Paths..
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,14 +19,20 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once 'lib/db.php';
+use \OCP\JSON;
 
-OC_Util::checkAdminUser();
-OC_Util::checkAppEnabled('latch_plugin');
-OCP\Util::callCheck(); // Prevents CRSF
+use \OCA\Latch_Plugin\AppInfo\Application;
 
-OC_LATCH_PLUGIN_DB::deletePluginData();
+JSON::checkAdminUser();
+
+$app = new Application();
+JSON::checkAppEnabled($app->getContainer()->query('AppName'));
+
+JSON::callCheck(); // Prevents CSRF
+
+$app->getContainer()->query('DbService')->deletePluginData();
 
 // Redirect to home:
-header( 'Location: '.OC_Helper::linkToAbsolute( '', 'index.php' ));
+$homeUrl = $app->getContainer()->query('URLHelper')->linkTo('', 'index.php');
+header('Location: '.$homeUrl);
 

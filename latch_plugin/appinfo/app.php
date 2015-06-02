@@ -1,8 +1,8 @@
 <?php
 
 /*
-  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
-  Copyright (C) 2014 Eleven Paths.
+  Latch ownCloud 8 plugin - Integrates Latch into the ownCloud 8 authentication process.
+  Copyright (C) 2015 Eleven Paths.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,18 +20,27 @@
  */
 
 /*
- * DESCRIPTION: This script is the first to be exeuted by ownCloud. 
+ * DESCRIPTION: This script is the first to be executed by ownCloud. 
  * It includes some libraries and defines the app architechture.
  */
 
-// Registration of some classes in the ownCloud's CLASSPATH variable:
-OC::$CLASSPATH['OC_LATCH_PLUGIN_Hooks'] = 'latch_plugin/lib/hooks.php';
+use \OCP\App;
 
+use \OCA\Latch_Plugin\AppInfo\Application;
+
+// Latch SDK files includes:
+require_once 'latch_plugin/latchSDK/Error.php';
+require_once 'latch_plugin/latchSDK/LatchResponse.php';
+require_once 'latch_plugin/latchSDK/LatchAuth.php';
+require_once 'latch_plugin/latchSDK/LatchApp.php';
+    
 // Hooks:
-OCP\Util::connectHook('OC_User','post_login','OC_LATCH_PLUGIN_Hooks','postLogin');
+$app = new Application();
+$app->getContainer()->query('LatchHooks')->register();
 
+$appName = $app->getContainer()->query('AppName');
 // Admin menu configuration:
-OCP\App::registerAdmin('latch_plugin','latchAdmin');
+App::registerAdmin($appName,'latchAdmin');
 
 // Pairing menu configuration:
-OCP\App::registerPersonal('latch_plugin','latchPairing');
+App::registerPersonal($appName,'latchPairing');

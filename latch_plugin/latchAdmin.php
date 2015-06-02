@@ -1,8 +1,8 @@
 <?php
 
 /*
-  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
-  Copyright (C) 2014 Eleven Paths.
+  Latch ownCloud 8 plugin - Integrates Latch into the ownCloud 8 authentication process.
+  Copyright (C) 2015 Eleven Paths.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,23 +25,33 @@
  * configure the Latch Application.
  */
 
-// Library includes:
-require_once 'lib/db.php';
+use \OCP\JSON;
+use \OCP\Template;
+use \OCP\Util;
+
+use \OCA\Latch_Plugin\AppInfo\Application;
+
+// Get an instance of the Application class for dependency injection purposes:
+$application = new Application();
+
+$appName = $application->getContainer()->query('AppName');
 
 // Check if admin user:
-OC_Util::checkAdminUser();
-OC_Util::checkAppEnabled('latch_plugin');
+JSON::checkAdminUser();
+JSON::checkAppEnabled($appName);
+
+$dbService = $application->getContainer()->query('DbService');
 
 // Needed for multi language support:
-$l = OC_L10N::get('latch_plugin');
+$l = $application->getContainer()->query('L10N');
 
 // Template object instantiation:
-OCP\Util::addStyle('firstrunwizard', 'colorbox');
-OCP\Util::addStyle(PLUGIN_NAME, 'uninstallStyle');
-OCP\Util::addStyle(PLUGIN_NAME, 'uninstallLatchStyle');
-OCP\Util::addScript(PLUGIN_NAME, 'uninstallPopup');
+Util::addStyle('firstrunwizard', 'colorbox');
+Util::addStyle($appName, 'uninstallStyle');
+Util::addStyle($appName, 'uninstallLatchStyle');
+Util::addScript($appName, 'uninstallPopup');
 
-$tmpl = new OCP\Template(PLUGIN_NAME, 'latchAdminTemplate');
+$tmpl = new Template($appName, 'latchAdminTemplate');
 
 $msg = '';
 
@@ -49,13 +59,13 @@ $msg = '';
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && 
     isset($_POST['appID']) && isset($_POST['appSecret'])){
     
-    OCP\Util::callCheck(); // Prevents CRSF
+    JSON::callCheck(); // Prevents CSRF
     
     if (preg_match("/^[a-zA-Z0-9]{20}$/",$_POST['appID']) && 
         preg_match("/^[a-zA-Z0-9]{40}$/",$_POST['appSecret'])){
 
-        OC_LATCH_PLUGIN_DB::saveAppID($_POST['appID']);
-        OC_LATCH_PLUGIN_DB::saveAppSecret($_POST['appSecret']);
+        $dbService->saveAppID($_POST['appID']);
+        $dbService->saveAppSecret($_POST['appSecret']);
     }else{
         
         $msg = [
@@ -66,10 +76,10 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') &&
 }
 
 // Set placeholders to the input fields:
-$appID = OC_LATCH_PLUGIN_DB::retrieveAppID();
+$appID = $dbService->retrieveAppID();
 $tmpl->assign('appID',$appID);
 
-$appSecret = OC_LATCH_PLUGIN_DB::retrieveAppSecret();
+$appSecret = $dbService->retrieveAppSecret();
 $tmpl->assign('appSecret',$appSecret);
 
 $tmpl->assign('msg',$msg);

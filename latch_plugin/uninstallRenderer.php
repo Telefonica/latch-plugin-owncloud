@@ -1,8 +1,8 @@
 <?php
 
 /*
-  Latch ownCloud 7 plugin - Integrates Latch into the ownCloud 7 authentication process.
-  Copyright (C) 2014 Eleven Paths.
+  Latch ownCloud 8 plugin - Integrates Latch into the ownCloud 8 authentication process.
+  Copyright (C) 2015 Eleven Paths.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,9 +19,17 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-OCP\User::checkLoggedIn();
-OC_Util::checkAppEnabled('latch_plugin');
+use \OCP\JSON;
+use \OCP\Template;
 
-$tmpl = new OCP\Template('latch_plugin', 'uninstallTemplate');
+use \OCA\Latch_Plugin\AppInfo\Application;
+
+JSON::checkLoggedIn();
+
+$app = new Application();
+$appName = $app->getContainer()->query('AppName');
+JSON::checkAppEnabled($appName);
+
+$tmpl = new Template($appName, 'uninstallTemplate');
 
 return $tmpl->printPage();
