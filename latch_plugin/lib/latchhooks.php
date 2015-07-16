@@ -88,7 +88,7 @@ class LatchHooks{
                 'rememberLoginAllowed' => true,
                 'invalidpassword' => false
             ];
-            OC_Template::printGuestPage('','login',$parameters);
+            Template::printGuestPage('','login',$parameters);
             exit();
         }
         
@@ -154,7 +154,7 @@ class LatchHooks{
                 $params = ['invalidpassword' => true,
                             'rememberLoginAllowed' => true,
                             'username' => $user];
-                OC_Template::printGuestPage('','login',$params);
+                Template::printGuestPage('','login',$params);
                 exit();
             }
         }
@@ -173,8 +173,8 @@ class LatchHooks{
             // End current user's session and redirect them to OTP template:
             $this->userSession->logout();
             $vars = ['username' => $user, 'password' => $password];
-            OCP\Util::addStyle('latch_plugin', 'latchOTPTemplate');
-            OC_Template::printGuestPage('latch_plugin','latchOTPTemplate',$vars);
+            Util::addStyle('latch_plugin', 'latchOTPTemplate');
+            Template::printGuestPage('latch_plugin','latchOTPTemplate',$vars);
             exit();
         }
     }
