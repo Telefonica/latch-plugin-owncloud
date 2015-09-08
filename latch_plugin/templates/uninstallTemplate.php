@@ -36,7 +36,7 @@
             <br>
             <p><strong><?php p($l->t('Warning: This action cannot be undone.')); ?></strong></p>
             <br> <br> <br>
-            <form method="POST" action="<?php print_unescaped(\OCP\Util::linkToRoute('latch_uninstall')); ?>">
+            <form method="POST" action="<?php print_unescaped(\OCP\Util::linkToRoute('latch_uninstall')); ?>" style="display: inline;">
                 <input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']);?>" />
                 <input type="submit" value="<?php p($l->t('Accept')); ?>" class="button" style="background: #00b9be;color: #FFF;
                        font-family: inherit;vertical-align: baseline;width: 77px;height: 32px;padding-top: 3px">
